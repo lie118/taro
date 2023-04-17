@@ -1,12 +1,12 @@
 import { View, Text } from "@tarojs/components";
 import "./index.scss";
 
-const Index = () => {
+const User = () => {
   return (
     <View>
-      <Text>Hello world222!</Text>
+      <Text>User</Text>
     </View>
   );
 };
 
-export default Index;
+export default User;
