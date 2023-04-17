@@ -1,24 +1,12 @@
-import { Component, PropsWithChildren } from 'react'
-import { View, Text } from '@tarojs/components'
-import './index.scss'
+import { View, Text } from "@tarojs/components";
+import "./index.scss";
 
-export default class Index extends Component<PropsWithChildren> {
+const Index = () => {
+  return (
+    <View>
+      <Text>Hello world!</Text>
+    </View>
+  );
+};
 
-  componentWillMount () { }
-
-  componentDidMount () { }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
-
-  render () {
-    return (
-      <View className='index'>
-        <Text>Hello world!</Text>
-      </View>
-    )
-  }
-}
+export default Index;
