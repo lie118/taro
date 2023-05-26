@@ -44,7 +44,16 @@ const config = {
           generateScopedName: '[name]__[local]___[hash:base64:5]'
         }
       }
-    }
+    },
+    webpackChain(chain) {
+      chain.module
+        .rule('script')
+        .use('linariaLoader')
+        .loader('@linaria/webpack-loader')
+        .options({
+          sourceMap: process.env.NODE_ENV !== 'production',
+        })
+    },
   },
   h5: {
     publicPath: '/',
@@ -62,7 +71,16 @@ const config = {
           generateScopedName: '[name]__[local]___[hash:base64:5]'
         }
       }
-    }
+    },
+    webpackChain(chain) {
+      chain.module
+        .rule('script')
+        .use('linariaLoader')
+        .loader('@linaria/webpack-loader')
+        .options({
+          sourceMap: process.env.NODE_ENV !== 'production',
+        })
+    },
   },
   rn: {
     appName: 'taroDemo',
