@@ -4,9 +4,36 @@ import { styled } from "@linaria/react";
 import { useMemo } from "react";
 import { AtIcon } from "taro-ui";
 import "./index.scss";
-import Taro from "@tarojs/taro";
+import Taro, {
+  useAddToFavorites,
+  useShareAppMessage,
+  useShareTimeline,
+} from "@tarojs/taro";
 
 const Detail = () => {
+  useAddToFavorites(() => {
+    return {
+      title: "自定义收藏",
+      imageUrl: detailImage1,
+      query: "id=1",
+    };
+  });
+
+  useShareAppMessage(() => {
+    return {
+      title: "自定义转发标题",
+      imageUrl: detailImage1,
+      path: "/pages/detail/index?id=123",
+    };
+  });
+
+  useShareTimeline(() => {
+    return {
+      title: "自定义分享朋友圈标题",
+      imageUrl: detailImage1,
+      query: "id=123",
+    };
+  });
   const actions = useMemo(
     () => [
       {
@@ -26,8 +53,13 @@ const Detail = () => {
       },
       {
         text: "分享",
-        onClick: () => null,
+        onClick: () =>
+          Taro.showShareMenu({
+            withShareTicket: true,
+            showShareItems: ["shareAppMessage", "shareTimeline"],
+          }),
         icon: <AtIcon value="share" size={16} color="black" />,
+        openType: "share",
       },
     ],
     []
@@ -41,8 +73,12 @@ const Detail = () => {
         src={detailImage1}
       />
       <ActionsWrapper>
-        {actions.map(({ text, icon, onClick }) => (
-          <StyledButton key={text} onClick={onClick}>
+        {actions.map(({ text, icon, openType, onClick }) => (
+          <StyledButton
+            key={text}
+            openType={openType ? "share" : undefined}
+            onClick={onClick}
+          >
             {icon}
             <StyledText>{text}</StyledText>
           </StyledButton>
@@ -80,6 +116,10 @@ const StyledButton = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: center;
+  border: none;
+  &::after {
+    border: none;
+  }
 `;
 
 const StyledText = styled(Text)`
