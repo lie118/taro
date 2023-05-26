@@ -1,7 +1,7 @@
 import { View, Image, Button, Text, ButtonProps } from "@tarojs/components";
 import detailImage1 from "../../assets/detail/detail1.jpg";
 import { styled } from "@linaria/react";
-import { useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { AtIcon } from "taro-ui";
 import "./index.scss";
 import Taro, {
@@ -11,6 +11,8 @@ import Taro, {
 } from "@tarojs/taro";
 
 const Detail = () => {
+  const [hasAuth, setHasAuth] = useState(false);
+
   useAddToFavorites(() => {
     return {
       title: "自定义收藏",
@@ -34,6 +36,43 @@ const Detail = () => {
       query: "id=123",
     };
   });
+
+  const getAuth = useCallback(() => {
+    Taro.getSetting({
+      success: function (res) {
+        if (!res.authSetting["scope.writePhotosAlbum"]) {
+          Taro.authorize({
+            scope: "scope.writePhotosAlbum",
+            success: () => {
+              setHasAuth(true);
+            },
+          });
+        }
+      },
+    });
+  }, []);
+
+  // useEffect(() => {
+  //   getAuth();
+  // }, [getAuth]);
+
+  const handleClickDownload = useCallback(() => {
+    if (!hasAuth) {
+      return getAuth();
+    }
+
+    Taro.downloadFile({
+      url: "https://camo.githubusercontent.com/3e1b76e514b895760055987f164ce6c95935a3aa/687474703a2f2f73746f726167652e333630627579696d672e636f6d2f6d74642f686f6d652f6c6f676f2d3278313531333833373932363730372e706e67",
+      success: (res) => {
+        if (res.statusCode === 200) {
+          Taro.saveImageToPhotosAlbum({
+            filePath: res.tempFilePath,
+          });
+        }
+      },
+    });
+  }, [getAuth, hasAuth]);
+
   const actions = useMemo(
     () => [
       {
@@ -51,11 +90,7 @@ const Detail = () => {
       },
       {
         text: "下载",
-        onClick: () =>
-          Taro.downloadFile({
-            // url必须是网络图片，不能是临时地址
-            url: detailImage1,
-          }),
+        onClick: handleClickDownload,
         icon: <AtIcon value="download" size={16} color="black" />,
       },
       {
@@ -65,7 +100,7 @@ const Detail = () => {
         openType: "share",
       },
     ],
-    []
+    [handleClickDownload]
   );
 
   return (

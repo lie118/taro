@@ -1,8 +1,9 @@
 import "./index.scss";
 import { View, Image } from "@tarojs/components";
-import { useCallback, useEffect, useState } from "react";
+import React ,{ useCallback, useEffect, useState } from "react";
 import rowImage from "../../assets/home/横向.jpg";
 import Taro from "@tarojs/taro";
+
 
 type Data = {
   id: number;
