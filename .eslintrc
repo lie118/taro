@@ -26,6 +26,9 @@
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "react/jsx-uses-react": "off",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "import/first": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "jsx-quotes": "off"
   }
 }
