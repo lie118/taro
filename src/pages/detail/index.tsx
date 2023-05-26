@@ -1,4 +1,4 @@
-import { View, Image, Button, Text } from "@tarojs/components";
+import { View, Image, Button, Text, ButtonProps } from "@tarojs/components";
 import detailImage1 from "../../assets/detail/detail1.jpg";
 import { styled } from "@linaria/react";
 import { useMemo } from "react";
@@ -43,21 +43,24 @@ const Detail = () => {
       },
       {
         text: "收藏",
-        onClick: () => null,
+        onClick: () =>
+          Taro.addFileToFavorites({
+            filePath: detailImage1,
+          }),
         icon: <AtIcon value="heart" size={20} color="black" />,
       },
       {
         text: "下载",
-        onClick: () => null,
+        onClick: () =>
+          Taro.downloadFile({
+            // url必须是网络图片，不能是临时地址
+            url: detailImage1,
+          }),
         icon: <AtIcon value="download" size={16} color="black" />,
       },
       {
         text: "分享",
-        onClick: () =>
-          Taro.showShareMenu({
-            withShareTicket: true,
-            showShareItems: ["shareAppMessage", "shareTimeline"],
-          }),
+        onClick: () => null,
         icon: <AtIcon value="share" size={16} color="black" />,
         openType: "share",
       },
@@ -76,7 +79,7 @@ const Detail = () => {
         {actions.map(({ text, icon, openType, onClick }) => (
           <StyledButton
             key={text}
-            openType={openType ? "share" : undefined}
+            openType={openType as ButtonProps.OpenType}
             onClick={onClick}
           >
             {icon}
